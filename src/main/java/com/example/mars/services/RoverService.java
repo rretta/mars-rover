@@ -10,6 +10,8 @@ public class RoverService {
     private int y;
     private int direction;
 
+    private String fullcommand;
+
 
 
     public RoverService() {
@@ -17,6 +19,7 @@ public class RoverService {
         this.x = 0;
         this.y = 0;
         this.direction = 0;
+        this.fullcommand = "";
     }
 
     public RoverService(MapService mapService){
@@ -63,6 +66,8 @@ public class RoverService {
     public void input(String command){
         command = command.toLowerCase();
 
+        this.fullcommand = fullcommand + command;
+
         for (char c : command.toCharArray()) {
             if (c != 'l' && c != 'f' && c != 'b' && c != 'r') {
                 throw new IllegalArgumentException("Caracter no permitido: " + c);
@@ -72,20 +77,21 @@ public class RoverService {
     }
     private void executeCommand(Character c){
         switch (c) {
-            case 'l' -> this.direction = (this.direction + 3) % 4;
-            case 'r' -> this.direction = (this.direction + 1) % 4;
             case 'b' -> this.movement('b');
             case 'f' -> this.movement('f');
+            case 'l' -> this.direction = (this.direction + 3) % 4;
+            case 'r' -> this.direction = (this.direction + 1) % 4;
+
         }
     }
 
 
     private void movement(Character command){
-        int north = 0;
-        int east = 1;
-        int south = 2;
-        int west = 3;
-        if ((command == 'f' && this.direction == north) || (command == 'b' && this.direction == south) ){
+       final int NORTH = 0;
+       final int EAST = 1;
+       final int SOUTH = 2;
+       final int WEST = 3;
+        if ((command == 'f' && this.direction == NORTH) || (command == 'b' && this.direction == SOUTH) ){
             int[] new_position = new int[2];
             new_position[0] = x;
             new_position[1] = (y + 1) % mapService.getMapSizeY();
@@ -94,7 +100,7 @@ public class RoverService {
                 y = new_position[1];
                 return;
             }
-        }else if ((command == 'f' && this.direction == south) || (command == 'b' && this.direction == north) ){
+        }else if ((command == 'f' && this.direction == SOUTH) || (command == 'b' && this.direction == NORTH) ){
             int[] new_position = new int[2];
             new_position[0] = x;
             new_position[1] = (y + mapService.getMapSizeY() - 1) % mapService.getMapSizeY();
@@ -102,7 +108,7 @@ public class RoverService {
                 y = new_position[1];
                 return;
             }
-        }else if ((command == 'f' && this.direction == east) || (command == 'b' && this.direction == west) ){
+        }else if ((command == 'f' && this.direction == EAST) || (command == 'b' && this.direction == WEST) ){
             int[] new_position = new int[2];
             new_position[0] = (x + 1) % mapService.getMapSizeX();
             new_position[1] = y;
@@ -110,7 +116,7 @@ public class RoverService {
                 x = new_position[0];
                 return;
             }
-        }else if ((command == 'f' && this.direction == west) || (command == 'b' && this.direction == east) ){
+        }else if ((command == 'f' && this.direction == WEST) || (command == 'b' && this.direction == EAST) ){
             int[] new_position = new int[2];
             new_position[0] = (x + mapService.getMapSizeX() - 1) % mapService.getMapSizeX();
             new_position[1] = y;
@@ -119,7 +125,10 @@ public class RoverService {
                 return;
             }
         }
-        throw new RuntimeException("Existe un obstaculo en el camino, no se puedo completar el comando");
+
+        String parsedCommand = fullcommand.substring(4);
+
+        throw new RuntimeException("Existe un obstaculo en el camino, no se puedo completar el comando " + parsedCommand.toUpperCase());
     }
     public int getDirection(){
         return direction;

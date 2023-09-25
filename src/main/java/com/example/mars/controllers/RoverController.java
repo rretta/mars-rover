@@ -20,8 +20,9 @@ public class RoverController {
     public RoverController(MapController mapController) {
         this.mapController = mapController;
     }
-    @GetMapping("/rover")
+    @GetMapping("/api/rover")
     public ResponseEntity<RoverResponse> roverStatus(){
+        roverResponse = new RoverResponse();
         if (roverService !=null){
             roverResponse.entity = roverService;
             return new ResponseEntity<>(roverResponse, HttpStatus.OK);
@@ -30,7 +31,7 @@ public class RoverController {
             return new ResponseEntity<>(roverResponse ,HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/rover/createRover")
+    @PostMapping("/api/rover/default")
     public ResponseEntity<RoverResponse> createDefaultRover(){
         MapService mapService = mapController.getMap();
         RoverResponse roverResponse = new RoverResponse();
@@ -49,7 +50,7 @@ public class RoverController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/rover/createCustomRover/{x}/{y}/{facing}")
+    @PostMapping("/api/rover/custom/{xParam}/{yParam}")
     public ResponseEntity<RoverResponse> createCustomRover(@PathVariable int x, @PathVariable int y, @PathVariable int facing){
         MapService mapService = mapController.getMap();
         RoverResponse roverResponse = new RoverResponse();
@@ -68,9 +69,14 @@ public class RoverController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/rover/input/{input}")
+    @PostMapping("/api/rover/move/{input}")
+
     public ResponseEntity<RoverResponse> sendInputToRover(@PathVariable String input){
+
+        roverResponse = new RoverResponse();
+
         if (roverService !=null){
+
             roverService.input(input);
             roverResponse.entity = roverService;
             return new ResponseEntity<>(roverResponse, HttpStatus.OK);

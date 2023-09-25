@@ -28,7 +28,7 @@ public class MapService {
 
     public void createRandomObstacle(){
         if (hasRover){
-            throw new IllegalCallerException("No se pueden editar los obstaculos cuando ya hay un rover desplegado");
+            throw new IllegalCallerException("Debe crear los obstaculos antes de crear el Rover");
         }
         int [] coords = new int[2];
         Random random = new Random();
