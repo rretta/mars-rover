@@ -9,7 +9,7 @@
   
 </p>
 
-API Rest created for the [ATL Academy](https://getgophish.com) in which the [Mars Rover Kata](https://getgophish.com) is performed using Java as language and applying TDD with Junit.
+API Rest created for [ATL Academy](https://getgophish.com) in which the [Mars Rover Kata](https://getgophish.com) is performed using Java as language and applying TDD with Junit.
 
 This readme describes how to use the API and the endpoints.
 
