@@ -1,19 +1,27 @@
 package com.example.mars.controllers;
 
 
+import com.example.mars.dto.ObstacleDto;
+import com.example.mars.models.Obstacle;
 import com.example.mars.responses.MapResponse;
 import com.example.mars.services.MapService;
+import com.example.mars.services.ObstacleService;
+import com.example.mars.services.ObstacleServiceImp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 @RestController
 public class MapController {
     private MapService mapService;
     private MapResponse mapResponse;
+
+
+    @Autowired
+    private ObstacleServiceImp obstacleService;
 
 
     @GetMapping("/api/map")
@@ -36,6 +44,13 @@ public class MapController {
         mapResponse = new MapResponse();
         mapResponse.exception = "No hay mapa";
         return new ResponseEntity<>(mapResponse, HttpStatus.BAD_REQUEST);
+
+    }
+
+    @GetMapping("/api/map/obstacles")
+    public List<Obstacle> getAllObstacles() {
+
+       return obstacleService.findAll();
 
     }
 
@@ -88,7 +103,9 @@ public class MapController {
             return new ResponseEntity<>(mapResponse, HttpStatus.BAD_REQUEST);
         }
         try {
-            mapService.createRandomObstacle();
+            int[] coords = mapService.createRandomObstacle();
+
+            obstacleService.guardarObstaculo(coords[0], coords[1]);
             mapResponse.entity = mapService;
             return new ResponseEntity<>(mapResponse, HttpStatus.CREATED);
         } catch (Exception e) {

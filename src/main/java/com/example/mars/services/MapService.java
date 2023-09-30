@@ -1,8 +1,17 @@
 package com.example.mars.services;
+import com.example.mars.models.Obstacle;
+import com.example.mars.repository.IObstacleRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -10,6 +19,11 @@ public class MapService {
     private final int mapSizeX;
     private final int mapSizeY;
     private  boolean hasRover = false;
+
+
+
+//@Autowired
+//ObstacleServiceImp obstacleService;
 
     private ArrayList<int[]> obstacles = new ArrayList<>();
 
@@ -26,7 +40,9 @@ public class MapService {
         this.mapSizeY = 10;
     }
 
-    public void createRandomObstacle(){
+
+
+    public int[] createRandomObstacle(){
         if (hasRover){
             throw new IllegalCallerException("Debe crear los obstaculos antes de crear el Rover");
         }
@@ -34,14 +50,41 @@ public class MapService {
         Random random = new Random();
         coords[0] = random.nextInt(this.getMapSizeX()+1);
         coords[1] = random.nextInt(this.getMapSizeY()+1);
+
         if (obstacles.isEmpty()){
             obstacles.add(coords);
+            return coords;
+
+
+
         }else if(checkEmptyObstaclePosition(coords)){
             obstacles.add(coords);
+            return coords;
+
         }else {
             obstacles.add(findEmptyCoordinate());
+            return coords;
+            //obstacleService.guardarObstaculo(coords[0], coords[1]);
         }
     }
+
+/*
+    @Transactional
+    private void saveOnDBObstacle(Integer x, Integer y){
+        try {
+            String consultaSql = "INSERT INTO obstacle (posx, posy) VALUES (:xParametro, :yParametro )";
+            baseDeDatos.createNativeQuery(consultaSql)
+                    .setParameter("xParametro", x)
+                    .setParameter("yParametro", y)
+                    .executeUpdate();
+        }catch(Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Error al guardar obstaculo en DB.");
+        }
+
+    }
+*/
+
     public int[] findEmptyCoordinate() {
         for (int i = 0; i <= mapSizeX; i++) {
             for (int j = 0; j <= mapSizeY; j++) {
@@ -68,7 +111,9 @@ public class MapService {
 
 
 
+
     public ArrayList<int[]> getObstacles() {
+
         return obstacles;
     }
 
