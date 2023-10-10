@@ -22,7 +22,7 @@ public class ObstacleServiceImp implements ObstacleService {
 
     @Override
     public void guardarObstaculo(int X, int Y) {
-        System.out.println("testing");
+
         Obstacle obstacle = new Obstacle();
         obstacle.setX(X);
         obstacle.setY(Y);

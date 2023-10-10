@@ -1,7 +1,7 @@
 package com.example.mars;
 
 import com.example.mars.services.MapService;
-import com.example.mars.services.RoverService;
+import com.example.mars.services.RoverServiceImp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ public class RoverTest {
     @Test
     public void shouldCreateRoverWithDefaultPosition() {
         MapService map = new MapService(10, 10);
-        RoverService rover = new RoverService(map);
+        RoverServiceImp rover = new RoverServiceImp(map);
 
         int[] position = rover.position();
 
@@ -22,7 +22,7 @@ public class RoverTest {
     @Test
     public void shouldCreateRoverWithCustomPosition() {
         MapService map = new MapService(10, 10);
-        RoverService rover = new RoverService(map, 5, 5, 2);
+        RoverServiceImp rover = new RoverServiceImp(map, 5, 5, 2);
 
         int[] position = rover.position();
 
@@ -34,7 +34,7 @@ public class RoverTest {
     @Test
     public void shouldMoveRoverForward() {
         MapService map = new MapService(10, 10);
-        RoverService rover = new RoverService(map);
+        RoverServiceImp rover = new RoverServiceImp(map);
 
         rover.input("f");
         int[] position = rover.position();
@@ -46,7 +46,7 @@ public class RoverTest {
     @Test
     public void shouldMoveRoverBackward() {
         MapService map = new MapService(10, 10);
-        RoverService rover = new RoverService(map);
+        RoverServiceImp rover = new RoverServiceImp(map);
 
         rover.input("b");
         int[] position = rover.position();
@@ -58,7 +58,7 @@ public class RoverTest {
     @Test
     public void shouldTurnRoverLeft() {
         MapService map = new MapService(10, 10);
-        RoverService rover = new RoverService(map);
+        RoverServiceImp rover = new RoverServiceImp(map);
 
         rover.input("l");
 
@@ -68,7 +68,7 @@ public class RoverTest {
     @Test
     public void shouldTurnRoverRight() {
         MapService map = new MapService(10, 10);
-        RoverService rover = new RoverService(map);
+        RoverServiceImp rover = new RoverServiceImp(map);
 
         rover.input("r");
 

@@ -2,7 +2,8 @@ package com.example.mars.controllers;
 
 import com.example.mars.responses.RoverResponse;
 import com.example.mars.services.MapService;
-import com.example.mars.services.RoverService;
+import com.example.mars.services.RoverServiceImp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RoverController {
-    private RoverService roverService;
+
     private RoverResponse roverResponse;
     private final MapController mapController;
 
+
+    @Autowired
+    private RoverServiceImp roverService;
+
+    private RoverServiceImp roverServiceImp;
     public RoverController(MapController mapController) {
         this.mapController = mapController;
     }
     @GetMapping("/api/rover")
     public ResponseEntity<RoverResponse> roverStatus(){
         roverResponse = new RoverResponse();
-        if (roverService !=null){
-            roverResponse.entity = roverService;
+        if (roverServiceImp !=null){
+            roverResponse.entity = roverServiceImp;
             return new ResponseEntity<>(roverResponse, HttpStatus.OK);
         }else{
             roverResponse.exception = "No existe ningun rover";
@@ -35,10 +41,10 @@ public class RoverController {
     public ResponseEntity<RoverResponse> createDefaultRover(){
         MapService mapService = mapController.getMap();
         RoverResponse roverResponse = new RoverResponse();
-        if (roverService == null && mapService !=null){
+        if (roverServiceImp == null && mapService !=null){
             try {
-                roverService = new RoverService(mapService);
-                roverResponse.entity = roverService;
+                roverServiceImp = new RoverServiceImp(mapService);
+                roverResponse.entity = roverServiceImp;
                 return new ResponseEntity<>(roverResponse, HttpStatus.CREATED);
             }catch(Exception e){
                 roverResponse.exception = e.getMessage();
@@ -54,10 +60,10 @@ public class RoverController {
     public ResponseEntity<RoverResponse> createCustomRover(@PathVariable int x, @PathVariable int y, @PathVariable int facing){
         MapService mapService = mapController.getMap();
         RoverResponse roverResponse = new RoverResponse();
-        if (roverService == null && mapService !=null){
+        if (roverServiceImp == null && mapService !=null){
             try{
-                roverService = new RoverService(mapService,x,y,facing);
-                roverResponse.entity = roverService;
+                roverServiceImp = new RoverServiceImp(mapService,x,y,facing);
+                roverResponse.entity = roverServiceImp;
                 return new ResponseEntity<>(roverResponse, HttpStatus.CREATED);
             }catch(Exception e){
                 roverResponse.exception = e.getMessage();
@@ -75,10 +81,13 @@ public class RoverController {
 
         roverResponse = new RoverResponse();
 
-        if (roverService !=null){
+        if (roverServiceImp !=null){
 
-            roverService.input(input);
-            roverResponse.entity = roverService;
+            roverServiceImp.input(input);
+            roverResponse.entity = roverServiceImp;
+
+            roverService.guardarRover(roverServiceImp.getX(), roverServiceImp.getY(), roverServiceImp.getDirection());
+
             return new ResponseEntity<>(roverResponse, HttpStatus.OK);
         }else{
             roverResponse.exception = "No existe ningun rover.";

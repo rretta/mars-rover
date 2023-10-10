@@ -104,7 +104,6 @@ public class MapController {
         }
         try {
             int[] coords = mapService.createRandomObstacle();
-
             obstacleService.guardarObstaculo(coords[0], coords[1]);
             mapResponse.entity = mapService;
             return new ResponseEntity<>(mapResponse, HttpStatus.CREATED);

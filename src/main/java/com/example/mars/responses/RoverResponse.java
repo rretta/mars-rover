@@ -1,8 +1,8 @@
 package com.example.mars.responses;
 
-import com.example.mars.services.RoverService;
+import com.example.mars.services.RoverServiceImp;
 
 public class RoverResponse {
-    public RoverService entity;
+    public RoverServiceImp entity;
     public String exception;
 }
